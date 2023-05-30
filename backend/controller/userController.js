@@ -85,6 +85,13 @@ export const postUserController = asyncWrapper(async (req, res) => {
 // @desc  -   Update user data
 // @Route  -   PUT /api/v1/:id
 // @Access -   Private
+export const getUserController = asyncWrapper(async (req, res) => {
+  res.status(200).json({ msg: "Get User" });
+});
+
+// @desc  -   Update user data
+// @Route  -   PUT /api/v1/:id
+// @Access -   Private
 export const updateUserController = asyncWrapper(async (req, res) => {
   res.status(200).json({ msg: "Update User" });
 });
