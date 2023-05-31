@@ -84,7 +84,7 @@ export const postUserController = asyncWrapper(async (req, res) => {
 
 // @desc  -   Update user data
 // @Route  -   PUT /api/v1/:id
-// @Access -   Private
+// @Access -   Private (Protected)
 export const getUserController = asyncWrapper(async (req, res) => {
   //Get user detail
   const user = await User.findById(req.user._id);
@@ -106,14 +106,41 @@ export const getUserController = asyncWrapper(async (req, res) => {
 
 // @desc  -   Update user data
 // @Route  -   PUT /api/v1/:id
-// @Access -   Private
+// @Access -   Private (Protected)
 export const updateUserController = asyncWrapper(async (req, res) => {
-  res.status(200).json({ msg: "Update User" });
+  //Get jwt token
+  const user = await User.findById(req.user._id);
+
+  //check user if null
+  if (user) {
+    //Get User data
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+
+    //Check if user want to change password
+    if (req.body.password) {
+      //Change password
+      user.password = req.body.password;
+    }
+
+    //Save the updated user to database
+    const updatedUser = await user.save();
+
+    //Return a data payload to user
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+    });
+  } else {
+    res.status(401);
+    throw new Error("Invalid token, Please try again later!");
+  }
 });
 
 // @desc  -   Delete user data
 // @Route  -   DELETE /api/v1/:id
-// @Access -   Private
+// @Access -   Private (Protected)
 export const deleteUserController = asyncWrapper(async (req, res) => {
   const { id } = req.params;
 

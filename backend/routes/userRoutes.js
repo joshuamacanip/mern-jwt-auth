@@ -17,7 +17,7 @@ router.post("/logout", logOutUserController);
 
 // Private Route
 router.get("/get", protect, getUserController);
-router.put("/:id", updateUserController);
+router.put("/", protect, updateUserController);
 router.delete("/:id", deleteUserController);
 
 export default router;
