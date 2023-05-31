@@ -86,7 +86,22 @@ export const postUserController = asyncWrapper(async (req, res) => {
 // @Route  -   PUT /api/v1/:id
 // @Access -   Private
 export const getUserController = asyncWrapper(async (req, res) => {
-  res.status(200).json({ msg: "Get User" });
+  //Get user detail
+  const user = await User.findById(req.user._id);
+
+  //Check user
+  if (user) {
+    //Return user credintials
+    res.status(200).json({
+      _id: user.id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    //Throw error if controller failed to get user detail
+    res.status(401);
+    throw new Error("Failed to get user detail!");
+  }
 });
 
 // @desc  -   Update user data
